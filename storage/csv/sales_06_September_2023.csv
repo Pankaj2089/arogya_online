@@ -1,0 +1,5 @@
+S.No,"Invoice ID","Billing Name","Billing Email","Billing Phone","Vendor Name","Vendor Email","Vendor Phone","User Name","User Email","User Phone","Order Status",Total,"Shipping Name","Shipping Email","Shipping Phone","Shipping Address","Shipping City","Shipping State","Shipping Zipcode",PaymentMethodType,PaymentMethod,ShippingMethod,TrackingNo,TransactionId,SettlementUtr,Created
+1,2023/08/012,Vikky,vikky@gmail.com,345345345,"Vishal Vendor",vb@vb.com,9910548954,Vikky,vikky@gmail.com,345345345,RTO,7036.00,Vikky,vikky@gmail.com,345345345,dfg,Jaipur,Raj,302012,COD,PAYTM,"Vishal Logistics",23434655,,,"2023-08-23 06:24:30"
+2,2023/08/007,"vb c",vb@yu.com,12345,"Vishal Vendor",vb@vb.com,9910548954,"vb c",vb@yu.com,12345,Paid,170.45,"vb c",vb@yu.com,12345,"GGN add",GGN,HRY,122233,PREPAID,PAYTM,"Vishal Logistics",14356792344,,,"2023-08-20 03:20:46"
+3,2023/08/003,"Narendra Jangid",nitam1989@gmail.com,7737406899,"Aayush Bharat",--,--,"Narendra Jangid",nitam1989@gmail.com,7737406899,Shipped,154.50,"Narendra Jangid",nitam1989@gmail.com,7737406899,"#897 Test Road",Jaipur,Raj,899483,COD,PAYTM,"Shipping Method One",534534534,,,"2023-08-17 04:40:24"
+,

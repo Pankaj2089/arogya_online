@@ -1,0 +1,10 @@
+S.No,Invoice,Name,Email,Phone,Address,Country,City,State,Zipcode,Product,"Order Date","Coupon Code","Sub Total",Discount,Total,"Order Status",Created
+1,7724508,"Narendra Jangid",narendra@test.com,1236547890,"khatipura road jhotwara",Jaipur,Rajasthan,India,302012,"Samsung LED Television 32'",2024-09-21,MANISH12,5950,595,5355,Delivered,"21-09-2024 06:56am"
+2,3331587,"Manish Jangid",manish@hello.com,3216549879,"test address",jaipur,rajasthan,India,302012,"Samsung LED Television 32'",2024-09-21,,5950,0,5950,Pending,"21-09-2024 06:35am"
+3,1744196,"Manish Kumar",manish@newtest.com,3216549789,"test address","test city","test state",India,302012,"Samsung LED Television 32'",2024-09-21,,5950,0,5950,Pending,"21-09-2024 06:10am"
+4,0165631,"Manish Jangid",manish@hello.com,3216549845,"test address","test city","test state",India,321646,"Samsung LED Television 32'",2024-09-21,MANISH12,5950,595,5355,Pending,"21-09-2024 05:58am"
+5,9614461,"Manish Jangid",manish@test.com,3216544987,"test address",test,test,India,345345,"Samsung LED Television 32'",2024-09-20,MANISH12,5950,595,5355,Pending,"20-09-2024 01:08pm"
+6,2288501,"test test",test@test.com,2342342342,test,tset,test,Iceland,35423423,"Samsung LED Television 32'",2024-09-20,MANISH12,5355,,5355,Pending,"20-09-2024 12:36pm"
+7,4317141,"test test",test@test.com,3216549877,"test again","test city","test state",India,,"Samsung LED Television 32'",2024-09-20,,5950,,5950,Pending,"20-09-2024 12:32pm"
+8,6864751,,manish@test.com,3216549879,"test address","test city","test state",India,,"Samsung LED Television 32'",2024-09-20,,5355,,5355,Pending,"20-09-2024 12:24pm"
+,
