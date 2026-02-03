@@ -65,6 +65,8 @@
                                         <tr>
                                         	<th>#</th>
                                             <th>NAME</th>
+                                            <th>TYPE</th>
+                                            <th>DEPARTMENT</th>
                                             <th>EMAIL</th>
                                             <th>MOBILE</th>
                                             <th>STATUS</th>

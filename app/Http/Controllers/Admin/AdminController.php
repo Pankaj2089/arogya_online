@@ -62,12 +62,17 @@ class AdminController extends Controller{
 
 			$User = self::$UserModel->where(array('email' => $request->email))->first();
 			if($User){
-				if($User->type == 'Admin' || $User->type == 'Account'){
+				$allowedTypes = ['Admin', 'Account', 'Doctor', 'Operator'];
+				if(in_array($User->type, $allowedTypes)){
 					$PasswordMatch = password_verify($request->password, $User->password);
 					if(!$PasswordMatch){
 						echo json_encode(array('heading'=>'Error Account','msg'=>'Username and password incorrect'));
 					}else{
-						session(['admin_id' => $User->id, 'admin_email' => $User->email, 'admin_profile' => $User, 'admin_type' => $User->type, 'admin_name' => $User->name]);
+						$sessionData = ['admin_id' => $User->id, 'admin_email' => $User->email, 'admin_profile' => $User, 'admin_type' => $User->type, 'admin_name' => $User->name];
+						if (in_array($User->type, ['Doctor', 'Operator']) && !empty($User->dept_id)) {
+							$sessionData['admin_dept_id'] = (int) $User->dept_id;
+						}
+						session($sessionData);
 						echo json_encode(array('heading'=>'Success','msg'=>''));
 					}
 				}else{

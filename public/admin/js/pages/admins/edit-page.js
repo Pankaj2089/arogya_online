@@ -1,11 +1,32 @@
 $(document).ready(function(){
     var formSubmitted = false;
+    function toggleDeptWrapper(){
+        if($("#type").val() === 'Doctor'){
+            $('#dept_id_wrapper').show();
+            $('#dept_id').prop('required', true);
+        } else {
+            $('#dept_id_wrapper').hide();
+            $('#dept_id').prop('required', false).val('');
+        }
+    }
+    $('#type').on('change', toggleDeptWrapper);
+    toggleDeptWrapper();
 	$('#form_submit').click(function(e){
 		var flag = 0;
         if(!formSubmitted){
             formSubmitted = false;
 			var validateMobNum= /^\d*(?:\.\d{1,2})?$/;
 			var mobileNum = $.trim($("#mobile").val());
+            if(!$("#type").val() || $.trim($("#type").val()) == ''){
+                flag = 1;
+                swal("Error!", 'Please select Type.', "error");
+                return false;
+            }
+            if($("#type").val() === 'Doctor' && (!$("#dept_id").val() || $.trim($("#dept_id").val()) == '')){
+                flag = 1;
+                swal("Error!", 'Please select Department.', "error");
+                return false;
+            }
             if($.trim($("#name").val()) == ''){
                 flag = 1;
                 swal("Error!", 'Please Enter Name.', "error");

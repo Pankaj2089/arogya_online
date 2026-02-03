@@ -36,11 +36,24 @@ class AjaxController extends Controller{
                     echo 'Cannot in-active this record (One or more practice are associated with this pathy.)';die;
                 }
             }
-            $newStatus = ($tableName == 'financial_years' || $tableName == 'departments' || $tableName == 'designations' || $tableName == 'diseases') ? ($status == 1 ? 0 : 1) : ($status == 1 ? 2 : 1);
+            $newStatus = ($tableName == 'financial_years' || $tableName == 'departments' || $tableName == 'designations' || $tableName == 'diseases' || $tableName == 'bed_distributions') ? ($status == 1 ? 0 : 1) : ($status == 1 ? 2 : 1);
             if($tableName == 'financial_years' && $newStatus == 1){
                 DB::table($tableName)->update(array('status' => 0));
             }
-			DB::table($tableName)->where(array('id' => $rowID))->update(array('status' => $newStatus));
+            $updateQuery = DB::table($tableName)->where('id', $rowID);
+            if (function_exists('admin_dept_id') && admin_dept_id()) {
+                $deptId = admin_dept_id();
+                if ($tableName == 'bed_distributions') {
+                    $updateQuery->where('department_id', $deptId);
+                } elseif ($tableName == 'users') {
+                    $updateQuery->where('dept_id', $deptId);
+                } elseif ($tableName == 'diseases') {
+                    $updateQuery->where('dept_id', $deptId);
+                } elseif ($tableName == 'departments') {
+                    $updateQuery->where('id', $deptId);
+                }
+            }
+            $updateQuery->update(array('status' => $newStatus));
 			echo 'Success';die;
 		}else{
 			echo 'InvalidData'; die;
@@ -60,6 +73,14 @@ class AjaxController extends Controller{
             }
             if($tableName == 'financial_years'){
                 DB::table($tableName)->where('id', $rowID)->delete();
+            }elseif($tableName == 'designations'){
+                $designationUsed = DB::table('doctor_profiles')->where('designation_id', $rowID)->count();
+                if($designationUsed > 0){
+                    echo 'Cannot delete this record (One or more records are associated with this designation.)';die;
+                }
+                DB::table($tableName)->where('id', $rowID)->delete();
+            }elseif($tableName == 'departments' && function_exists('admin_dept_id') && admin_dept_id()){
+                echo 'Cannot delete department.'; die;
             }elseif($tableName == 'departments'){
                 $deptUsed = DB::table('diseases')->where('dept_id', $rowID)->count()
                     + DB::table('bed_distributions')->where('department_id', $rowID)->count()
@@ -69,14 +90,28 @@ class AjaxController extends Controller{
                     echo 'Cannot delete this record (One or more records are associated with this department.)';die;
                 }
                 DB::table($tableName)->where('id', $rowID)->delete();
-            }elseif($tableName == 'designations'){
-                $designationUsed = DB::table('doctor_profiles')->where('designation_id', $rowID)->count();
-                if($designationUsed > 0){
-                    echo 'Cannot delete this record (One or more records are associated with this designation.)';die;
+            }elseif($tableName == 'bed_distributions'){
+                $deleteQuery = DB::table($tableName)->where('id', $rowID);
+                if (function_exists('admin_dept_id') && admin_dept_id()) {
+                    $deleteQuery->where('department_id', admin_dept_id());
                 }
-                DB::table($tableName)->where('id', $rowID)->delete();
+                $ipdUsed = DB::table('ipd_registration')->where('bed_distribution_id', $rowID)->count();
+                if($ipdUsed > 0){
+                    echo 'Cannot delete this record (One or more IPD registrations use this bed.)';die;
+                }
+                $deleteQuery->delete();
+            }elseif($tableName == 'users'){
+                $userDeleteQuery = DB::table($tableName)->where('id', $rowID);
+                if (function_exists('admin_dept_id') && admin_dept_id()) {
+                    $userDeleteQuery->where('dept_id', admin_dept_id());
+                }
+                $userDeleteQuery->update(array('status' => 3));
             }elseif($tableName == 'diseases'){
-                DB::table($tableName)->where('id', $rowID)->delete();
+                $deleteQuery = DB::table($tableName)->where('id', $rowID);
+                if (function_exists('admin_dept_id') && admin_dept_id()) {
+                    $deleteQuery->where('dept_id', admin_dept_id());
+                }
+                $deleteQuery->delete();
             }else{
                 DB::table($tableName)->where(array('id' => $rowID))->update(array('status' => 3));
             }

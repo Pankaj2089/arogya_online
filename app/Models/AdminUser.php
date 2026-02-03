@@ -21,6 +21,7 @@ class AdminUser extends Authenticatable
      */
     protected $fillable = [
         "type",
+        'dept_id',
         'name',
         'email',
         'password'

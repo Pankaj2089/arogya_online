@@ -57,7 +57,7 @@
                 <input type="text" class="form-control" id="fath_husb_name" name="fath_husb_name" placeholder="First and last name">
               </div>
               </div>
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-2">
               <div class="form-group mb-3">
                 <label>Patient Age</label>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -70,7 +70,7 @@
                 </div>
               </div>
               </div>
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-6">
               <div class="form-group mb-3">
                 <label for="address">Address</label>
                 <input type="text" class="form-control" id="address" name="address" placeholder="Address">
@@ -111,9 +111,9 @@
     <div class="card mt-3 border-0 shadow-sm">
       <div class="card-body p-0">
         <div class="opd-last-strip d-flex flex-wrap align-items-center justify-content-between gap-3 px-4 py-3">
-          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Last OPD No:-</span>{{ $lastOpd ? $lastOpd->opd_number : '—' }}</span>
-          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Patient Name:-</span>{{ $lastOpd ? $lastOpd->patient_name : '—' }}</span>
-          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Date/Time:-</span>{{ $lastOpd && $lastOpd->created_date ? date('l, F j, Y / g:i A', strtotime($lastOpd->created_date)) : '—' }}</span>
+          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Last OPD No: - </span>{{ $lastOpd ? $lastOpd->opd_number : 'N/A' }}</span>
+          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Patient Name: - </span>{{ $lastOpd ? $lastOpd->patient_name : 'N/A' }}</span>
+          <span class="opd-strip-item fw-bold"><span class="opd-strip-label">Date/Time: - </span>{{ $lastOpd && $lastOpd->date ? date('l, F j, Y', strtotime($lastOpd->date)) : 'N/A' }}</span>
         </div>
       </div>
     </div>

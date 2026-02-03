@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'type',
+        'dept_id',
         'name',
         'email',
         'password',
@@ -76,6 +77,10 @@ class User extends Authenticatable
 		$Record = $this::create($Details);
 		return $Record;
 	}
+
+    public function department(){
+        return $this->belongsTo(Department::class, 'dept_id');
+    }
 
     public function ExistingRecord($email){
 		return $this::where('email',$email)->where('status','!=', 3)->exists();

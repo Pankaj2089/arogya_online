@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Symptoms;
 use App\Models\Ailments;
 use App\Models\User;
+use App\Models\Department;
 use App\Models\Specialties;
 use App\RouteHelper;
 use App\Models\TokenHelper;
@@ -33,8 +34,10 @@ class AdminsController extends Controller{
     }
     public function listPaginate(Request $request){
 		if(!$request->session()->has('admin_email')){return redirect('/admin/');}
-        $query = self::$User->where('status', '!=', 3)->where('type', 'Admin')->where('id','!=',1);
-
+        $query = self::$User->with('department')->where('status', 1)->whereIn('type', ['Admin', 'Operator', 'Doctor'])->where('id','!=',1);
+        if (admin_dept_id()) {
+            $query->where('dept_id', admin_dept_id());
+        }
 		if($request->input('name')  && $request->input('name') != ""){
             $name = $request->input('name');
             $query->where('name', 'like', '%'.$name.'%');
@@ -57,11 +60,17 @@ class AdminsController extends Controller{
 		if(!$request->session()->has('admin_email')){return redirect('/admin/');}
 		if($request->input()){
 			$validator = Validator::make($request->all(), [
+                'type' => 'required|in:Operator,Doctor',
+                'dept_id' => 'required_if:type,Doctor|nullable|exists:departments,id',
                 'name' => 'required',
 				'email' => 'required|email|unique:users,email',
                 'mobile' => 'required|min:10|numeric',
 				'password' => 'required'
             ],[
+                'type.required' => 'Please select type.',
+                'type.in' => 'Please select a valid type.',
+                'dept_id.required_if' => 'Please select department for Doctor.',
+                'dept_id.exists' => 'Please select a valid department.',
                 'name.required' => 'Please enter name.',
 				'email.required' => 'Please enter email.',
 				'email.email' => 'Please enter valid email.',
@@ -73,6 +82,12 @@ class AdminsController extends Controller{
             ]);
 			if($validator->fails()){
 				$errors = $validator->errors();
+				if($errors->first('type')){
+                    return json_encode(array('heading'=>'Error','msg'=>$errors->first('type')));die;
+				}
+				if($errors->first('dept_id')){
+                    return json_encode(array('heading'=>'Error','msg'=>$errors->first('dept_id')));die;
+				}
 				if($errors->first('name')){
                     return json_encode(array('heading'=>'Error','msg'=>$errors->first('name')));die;
 				}
@@ -87,7 +102,8 @@ class AdminsController extends Controller{
 				}                
 			}else{
                 if(!self::$User->ExistingRecord($request->input('email'))){
-                    $setData['type'] = 'Admin';
+                    $setData['type'] = $request->input('type');
+                    $setData['dept_id'] = $request->input('type') === 'Doctor' && $request->input('dept_id') ? (int) $request->input('dept_id') : null;
                     $setData['name'] = $request->input('name');
 					$setData['email'] = $request->input('email');
 					$setData['mobile'] = $request->input('mobile');
@@ -99,7 +115,8 @@ class AdminsController extends Controller{
                 echo json_encode(array('heading'=>'Success','msg'=>'Admin details added successfully'));die;
 			}
 		}
-		return view('/admin/admins/add-page');
+		$departments = Department::where('status', 1)->orderBy('name')->get(['id', 'name']);
+		return view('/admin/admins/add-page', compact('departments'));
     }
 
     #edit Service Type
@@ -109,11 +126,17 @@ class AdminsController extends Controller{
 
         if($request->input()){
 			$validator = Validator::make($request->all(), [
+                'type' => 'required|in:Admin,Operator,Doctor',
+                'dept_id' => 'required_if:type,Doctor|nullable|exists:departments,id',
                 'name' => 'required',
 				'email' => 'required|email|unique:users,email,'.$RowID,
                 'mobile' => 'required|min:10|numeric',
 				//'password' => 'required'
             ],[
+                'type.required' => 'Please select type.',
+                'type.in' => 'Please select a valid type.',
+                'dept_id.required_if' => 'Please select department for Doctor.',
+                'dept_id.exists' => 'Please select a valid department.',
                 'name.required' => 'Please enter name.',
 				'email.required' => 'Please enter email.',
 				'email.email' => 'Please enter valid email.',
@@ -125,6 +148,12 @@ class AdminsController extends Controller{
             ]);
 			if($validator->fails()){
 				$errors = $validator->errors();
+				if($errors->first('type')){
+                    return json_encode(array('heading'=>'Error','msg'=>$errors->first('type')));die;
+				}
+				if($errors->first('dept_id')){
+                    return json_encode(array('heading'=>'Error','msg'=>$errors->first('dept_id')));die;
+				}
 				if($errors->first('name')){
                     return json_encode(array('heading'=>'Error','msg'=>$errors->first('name')));die;
 				}
@@ -142,6 +171,8 @@ class AdminsController extends Controller{
                     echo json_encode(array('heading'=>'Error','msg'=>'Admin details already exists.'));die;
                 }else{
                     $setData['id'] =  $RowID;
+					$setData['type'] = $request->input('type');
+					$setData['dept_id'] = $request->input('type') === 'Doctor' && $request->input('dept_id') ? (int) $request->input('dept_id') : null;
 					$setData['name'] = $request->input('name');
 					$setData['email'] = $request->input('email');
 					$setData['mobile'] = $request->input('mobile');
@@ -155,8 +186,9 @@ class AdminsController extends Controller{
 			}
 		}
 		$rowData = self::$User->where(array('id' => $RowID))->first();
+		$departments = Department::where('status', 1)->orderBy('name')->get(['id', 'name']);
         if(isset($rowData->id)){
-            return view('/admin/admins/edit-page',compact('rowData','row_id'));
+            return view('/admin/admins/edit-page',compact('rowData','row_id','departments'));
         }else{
             return redirect('/admin/admins');
         }

@@ -11,7 +11,9 @@ use App\Http\Controllers\Admin\FinancialYearsController;
 use App\Http\Controllers\Admin\DepartmentsController;
 use App\Http\Controllers\Admin\DesignationsController;
 use App\Http\Controllers\Admin\DiseasesController;
+use App\Http\Controllers\Admin\BedDistributionsController;
 use App\Http\Controllers\Admin\OpdController;
+use App\Http\Controllers\Admin\IpdController;
 
 
 
@@ -107,10 +109,23 @@ Route::prefix('admin')->group(function(){
     Route::any('/add-disease',[DiseasesController::class, 'addPage'])->name('admin.add-disease');
     Route::any('/edit-disease/{row_id}',[DiseasesController::class, 'editPage'])->name('admin.edit-disease');
 
+	#Bed Distributions (General Managers)
+    Route::get('/bed-distributions',[BedDistributionsController::class, 'getList'])->name('admin.bed-distributions');
+    Route::any('/bed-distributions_paginate',[BedDistributionsController::class, 'listPaginate'])->name('admin.bed-distributions_paginate');
+    Route::any('/add-bed-distribution',[BedDistributionsController::class, 'addPage'])->name('admin.add-bed-distribution');
+    Route::any('/edit-bed-distribution/{row_id}',[BedDistributionsController::class, 'editPage'])->name('admin.edit-bed-distribution');
+
 	#OPD (OPD Manager)
     Route::any('/new-opd-registration',[OpdController::class, 'newOpdRegistration'])->name('admin.new-opd-registration');
     Route::any('/re-schedule-opd',[OpdController::class, 'reScheduleOpd'])->name('admin.re-schedule-opd');
-	
+    Route::any('/patient-diseases',[OpdController::class, 'patientDiseases'])->name('admin.patient-diseases');
+
+	#IPD
+    Route::any('/new-ipd-registration',[IpdController::class, 'newIpdRegistration'])->name('admin.new-ipd-registration');
+    Route::any('/update-ipd-registration',[IpdController::class, 'updateIpdRegistration'])->name('admin.update-ipd-registration');
+    Route::any('/re-print-ipd',[IpdController::class, 'rePrintIpd'])->name('admin.re-print-ipd');
+    Route::any('/patient-discharge',[IpdController::class, 'patientDischarge'])->name('admin.patient-discharge');
+
 });
 
 

@@ -23,6 +23,7 @@ class OpdRegistration extends Model
         'register_type',
         'opd_number',
         'hid_number',
+        'disease_id',
     ];
 
     protected $casts = [
@@ -37,5 +38,10 @@ class OpdRegistration extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'dept_id');
+    }
+
+    public function disease()
+    {
+        return $this->belongsTo(Disease::class, 'disease_id');
     }
 }

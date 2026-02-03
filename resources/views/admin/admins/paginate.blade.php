@@ -22,6 +22,20 @@
         </td>
         <td>
             <div class="d-flex align-items-center">
+                {!! $row->type ?? '—' !!}
+            </div>
+        </td>
+        <td>
+            <div class="d-flex align-items-center">
+                @if(($row->type ?? '') == 'Doctor' && $row->department)
+                    {!! $row->department->name !!}
+                @else
+                    —
+                @endif
+            </div>
+        </td>
+        <td>
+            <div class="d-flex align-items-center">
                 {!! $row->email !!}
             </div>
         </td>
@@ -56,11 +70,11 @@
     @endforeach
     @else
     <tr>
-        <td align="center" colspan="9">Record not found</td>
+        <td align="center" colspan="10">Record not found</td>
     </tr>
     @endif
     <tr>
-        <td align="center" colspan="9">
+        <td align="center" colspan="10">
             <div id="pagination">{{ $records->appends(request()->except('page'))->links('vendor.pagination.custom') }}</div>
         </td>
     </tr>

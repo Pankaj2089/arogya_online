@@ -28,6 +28,30 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label for="basicInput">Type <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="type" id="type" required>
+                                        <option value="">--Select--</option>
+                                        <option value="Admin" {{ ($rowData->type ?? '') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="Operator" {{ ($rowData->type ?? '') == 'Operator' ? 'selected' : '' }}>Operator</option>
+                                        <option value="Doctor" {{ ($rowData->type ?? '') == 'Doctor' ? 'selected' : '' }}>Doctor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="dept_id_wrapper" style="display: {{ ($rowData->type ?? '') == 'Doctor' ? 'block' : 'none' }};">
+                                <div class="form-group">
+                                    <label for="dept_id">Department <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="dept_id" id="dept_id">
+                                        <option value="">--Select--</option>
+                                        @if(isset($departments) && $departments->count())
+                                            @foreach($departments as $dept)
+                                                <option value="{{ $dept->id }}" {{ ($rowData->dept_id ?? '') == $dept->id ? 'selected' : '' }}>{{ $dept->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="basicInput">Name</label>
                                     <input type="text" class="form-control" placeholder="Enter Name" value="{{$rowData->name}}" name="name" id="name">
                                 </div>

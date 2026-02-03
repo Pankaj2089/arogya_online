@@ -106,6 +106,12 @@
 
             }
 
+            .submenu {
+
+                padding-left: 1rem;
+
+            }
+
             </style>
 
         </body>

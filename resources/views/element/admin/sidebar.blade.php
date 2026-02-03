@@ -50,9 +50,10 @@
          $managerOPDActive =
          $newOPDRegistration =
          $reScheduleOPD =
+         $patientDiseases =
          $admins =
          false;
-         if($action =='admin.new-opd-registration' ||  $action =='admin.re-schedule-opd'){
+         if($action =='admin.new-opd-registration' ||  $action =='admin.re-schedule-opd' ||  $action =='admin.patient-diseases'){
          	$managerOPDActive = true;
          }
          if($action =='admin.new-opd-registration'){
@@ -60,6 +61,9 @@
          }
          if($action =='admin.re-schedule-opd'){
          	$managerOPDActive = $reScheduleOPD = true;
+         }
+         if($action =='admin.patient-diseases'){
+         	$managerOPDActive = $patientDiseases = true;
          }
          @endphp
          <li class="sidebar-item  has-sub {{$managerOPDActive?'active':''}}"> 
@@ -73,12 +77,52 @@
              <li class="submenu-item {{$reScheduleOPD?'active':''}}"> 
              	<a href="{{ url('/admin/re-schedule-opd'); }}">Re-Schedule OPD </a> 
              </li>
+
+             <li class="submenu-item {{$patientDiseases?'active':''}}"> 
+             	<a href="{{ url('/admin/patient-diseases'); }}">Patient Diseases</a> 
+             </li>
             
              
            </ul>
         </li>
 
-        <?php /*?>
+        @php
+         $managerIPDActive =
+         $newIPDRegistration =
+         $updateIPDRegistration =
+         $rePrintIPD =
+         $patientDischarge =
+         false;
+         if($action =='admin.new-ipd-registration'){
+         	$managerIPDActive = $newIPDRegistration = true;
+         }
+         if($action =='admin.update-ipd-registration'){
+         	$managerIPDActive = $updateIPDRegistration = true;
+         }
+         if($action =='admin.re-print-ipd'){
+         	$managerIPDActive = $rePrintIPD = true;
+         }
+         if($action =='admin.patient-discharge'){
+         	$managerIPDActive = $patientDischarge = true;
+         }
+         @endphp
+         <li class="sidebar-item  has-sub {{$managerIPDActive?'active':''}}"> 
+         	<a href="#" class='sidebar-link'> <i class="bi bi-clipboard-plus"></i> <span>IPD</span> </a>
+          <ul class="submenu {{$managerIPDActive?'active':''}}">
+             <li class="submenu-item {{$newIPDRegistration?'active':''}}"> 
+             	<a href="{{ url('/admin/new-ipd-registration'); }}">New IPD Registration</a> 
+             </li>
+             <li class="submenu-item {{$updateIPDRegistration?'active':''}}"> 
+             	<a href="{{ url('/admin/update-ipd-registration'); }}">Update IPD Registration</a> 
+             </li>
+             <li class="submenu-item {{$rePrintIPD?'active':''}}"> 
+             	<a href="{{ url('/admin/re-print-ipd'); }}">Re-print IPD</a> 
+             </li>
+             <li class="submenu-item {{$patientDischarge?'active':''}}"> 
+             	<a href="{{ url('/admin/patient-discharge'); }}">Patient Discharge</a> 
+             </li>
+           </ul>
+        </li>
          @if(Session::get('admin_type') == 'Admin' || Session::get('admin_type') == 'Account')
          @php                        
          $managerActive =
@@ -96,24 +140,21 @@
          	<a href="#" class='sidebar-link'> <i class="bi bi-person-fill"></i> <span>Users</span> </a>
           <ul class="submenu {{$managerActive?'active':''}}">
           
-             <li class="submenu-item {{$users?'active':''}}"> 
-             	<a href="{{ url('/admin/users'); }}">Customers </a> 
-             </li>
-            @if(Session::get('admin_type') == 'Admin')
-             <li class="submenu-item {{$admins?'active':''}}"> 
-             	<a href="{{ url('/admin/admins'); }}">Admin Manager</a> 
-             </li>
-             @endif
              
+             <li class="submenu-item {{$admins?'active':''}}"> 
+             	<a href="{{ url('/admin/admins'); }}">Operator/ Doctors</a> 
+             </li>
+
            </ul>
         </li>
-         @endif<?php */?>
+         @endif
          @php
          $generalManagersActive =
          $financialYears =
          $departments =
          $designations =
          $diseases =
+         $bedDistributions =
          false;
          if($action =='admin.financial-years' || $action =='admin.add-financial-year' || $action =='admin.edit-financial-year'){
          	$generalManagersActive = $financialYears = true;
@@ -126,6 +167,9 @@
          }
          if($action =='admin.diseases' || $action =='admin.add-disease' || $action =='admin.edit-disease'){
          	$generalManagersActive = $diseases = true;
+         }
+         if($action =='admin.bed-distributions' || $action =='admin.add-bed-distribution' || $action =='admin.edit-bed-distribution'){
+         	$generalManagersActive = $bedDistributions = true;
          }
          @endphp
          <li class="sidebar-item has-sub {{$generalManagersActive?'active':''}}">
@@ -142,6 +186,9 @@
              </li>
              <li class="submenu-item {{$diseases?'active':''}}">
              	<a href="{{ url('/admin/diseases'); }}">Diseases</a>
+             </li>
+             <li class="submenu-item {{$bedDistributions?'active':''}}">
+             	<a href="{{ url('/admin/bed-distributions'); }}">Bed Distributions</a>
              </li>
            </ul>
          </li>
