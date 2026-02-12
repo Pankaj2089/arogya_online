@@ -103,7 +103,23 @@
             <div class="col-12 col-md-4">
               <div class="form-group mb-3">
                 <label for="diagnosis">Diagnosis</label>
-                <input type="text" class="form-control" id="diagnosis" name="diagnosis" placeholder="Diagnosis" value="{{ old('diagnosis') }}">
+               @if(!empty($disease?->name))
+                  <input type="text"
+                        class="form-control"
+                        value="{{ $disease->name }}"
+                        disabled>
+
+                  <input type="hidden"
+                        name="diagnosis"
+                        value="{{ $disease->name }}">
+              @else
+                  <input type="text"
+                        class="form-control"
+                        id="diagnosis"
+                        name="diagnosis"
+                        placeholder="Diagnosis"
+                        value="{{ old('diagnosis') }}">
+              @endif
               </div>
             </div>
             <div class="col-12 col-md-2">

@@ -10,6 +10,7 @@ class AddDischargeFieldsToIpdRegistrationTable extends Migration
     {
         Schema::table('ipd_registration', function (Blueprint $table) {
             $table->date('discharge_date')->nullable()->after('amount');
+            $table->string('discharge_type', 64)->nullable()->after('discharge_type');
             $table->unsignedBigInteger('discharge_dept_id')->nullable()->after('discharge_date');
         });
     }

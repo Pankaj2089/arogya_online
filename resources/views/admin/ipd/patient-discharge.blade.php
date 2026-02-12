@@ -58,13 +58,36 @@
             </div>
             <div class="col-12 col-md-4">
               <div class="form-group mb-3">
-                <label for="discharge_dept_id">Department</label>
-                <select class="form-select" id="discharge_dept_id" name="discharge_dept_id">
-                  <option value="">--Select--</option>
-                  @foreach($departments as $dept)
-                  <option value="{{ $dept->id }}">{{ $dept->name }}</option>
-                  @endforeach
+                <label for="discharge_date">Discharge Type  <span class="text-danger">*</span></label>
+                <select class="form-select" id="discharge_type" name="discharge_type" >
+                  <option value="Normal">Normal</option>
+                  <option value="Dama">Dama</option>
+                  <option value="Absconded">Absconded</option>
+                  <option value="Death">Death</option>
                 </select>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group mb-3">
+                <label for="discharge_dept_id">Department</label>
+                <select class="form-select"
+                        id="discharge_dept_id"
+                        {{$ipdRecord->opdRegistration->dept_id > 0 ? 'disabled':''}}>
+
+                    <option value="">--Select--</option>
+                    @foreach($departments as $dept)
+                      <option value="{{ $dept->id }}"
+                        {{$ipdRecord->opdRegistration->dept_id == $dept->id ? 'selected':''}}>
+                        {{ $dept->name }}
+                      </option>
+                    @endforeach
+                  </select>
+
+                @if($ipdRecord->opdRegistration->dept_id > 0)
+                  <input type="hidden"
+                        name="discharge_dept_id"
+                        value="{{ $ipdRecord->opdRegistration->dept_id }}">
+                @endif
               </div>
             </div>
           </div>
@@ -88,6 +111,7 @@ $(document).ready(function(){
       swal("Error!", "Please enter IPD number.", "error");
       return false;
     }
+    
   });
   $('#discharge_date').datepicker({
     dateFormat: 'mm/dd/yy',

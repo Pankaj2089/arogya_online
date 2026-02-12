@@ -8,6 +8,7 @@ use App\Models\IpdRegistration;
 use App\Models\User;
 use App\Models\BedDistribution;
 use App\Models\Department;
+use App\Models\Disease;
 use App\Models\FinancialYear;
 use Illuminate\Http\Request;
 use Validator;
@@ -34,7 +35,24 @@ class IpdController extends Controller
                 $opdRecord = $opdLookupQuery->first();
                 if (!$opdRecord) {
                     $opdLookupError = 'OPD number not found.';
+                }else{
+                    $patientAlreadyAdmit = IpdRegistration::where('opd_registration_id', $opdRecord->id)
+                    ->whereNull('discharge_date')
+                    ->where(function ($q) {
+                        $q->whereNull('bed_distribution_id')
+                        ->orWhereHas('bedDistribution', function ($b) {
+                            $b->where('bed_status', 'occupied');
+                        });
+                    })
+                    ->exists();
+
+                    if ($patientAlreadyAdmit) {
+                        $opdLookupError = 'Patient already admitted and not discharged yet.';
+                        $opdRecord = null;
+                    }
+
                 }
+
             } elseif ($request->has('opd_registration_id') && $request->input('opd_registration_id')) {
                 $validator = Validator::make($request->all(), [
                     'opd_registration_id' => 'required|exists:opd_registration,id',
@@ -119,9 +137,18 @@ class IpdController extends Controller
         if (admin_dept_id()) {
             $lastIpdQuery->where('dept_id', admin_dept_id());
         }
+        if ($deptId) {
+            $lastIpdQuery->where('dept_id', $deptId);
+        }
         $lastIpd = $lastIpdQuery->first();
 
-        return view('/admin/ipd/new-ipd-registration', compact('opdRecord', 'opdLookupError', 'doctors', 'beds', 'lastIpd'));
+        $disease = null;
+
+        if ($opdRecord && $opdRecord->disease_id > 0) {
+            $disease = Disease::find($opdRecord->disease_id);
+        }
+    
+        return view('/admin/ipd/new-ipd-registration', compact('opdRecord', 'opdLookupError', 'doctors', 'beds', 'lastIpd', 'disease'  ));
     }
 
     public function updateIpdRegistration(Request $request)
@@ -286,7 +313,7 @@ class IpdController extends Controller
             $ipdNo = trim($request->input('ipd_no', ''));
 
             if ($ipdNo !== '' && !$request->has('ipd_registration_id')) {
-                $dischargeLookupQuery = IpdRegistration::where('ipd_number', $ipdNo);
+                $dischargeLookupQuery = IpdRegistration::with('opdRegistration')->where('ipd_number', $ipdNo);
                 if ($deptId) {
                     $dischargeLookupQuery->where('dept_id', $deptId);
                 }
@@ -301,9 +328,11 @@ class IpdController extends Controller
                 $validator = Validator::make($request->all(), [
                     'ipd_registration_id' => 'required|exists:ipd_registration,id',
                     'discharge_date' => 'required|date',
+                    'discharge_type' => 'required',
                     'discharge_dept_id' => 'nullable|exists:departments,id',
                 ], [
                     'ipd_registration_id.required' => 'IPD registration is required.',
+                    'discharge_type.required' => 'Please select discharge type.',
                     'discharge_date.required' => 'Please select discharge date.',
                 ]);
                 if ($validator->fails()) {
@@ -311,7 +340,7 @@ class IpdController extends Controller
                     return response()->json(['heading' => 'Error', 'msg' => $firstError]);
                 }
 
-                $ipdFindQuery = IpdRegistration::where('id', $request->input('ipd_registration_id'));
+                $ipdFindQuery = IpdRegistration::with('opdRegistration')->where('id', $request->input('ipd_registration_id'));
                 if ($deptId) {
                     $ipdFindQuery->where('dept_id', $deptId);
                 }
@@ -338,6 +367,7 @@ class IpdController extends Controller
 
                 $ipdRecord->discharge_date = $dateDb;
                 $ipdRecord->discharge_dept_id = $request->input('discharge_dept_id') ? (int) $request->input('discharge_dept_id') : null;
+                $ipdRecord->discharge_type = $request->input('discharge_type') ?  $request->input('discharge_type') : null;
                 $ipdRecord->save();
 
                 if ($ipdRecord->bed_distribution_id) {
@@ -347,7 +377,6 @@ class IpdController extends Controller
                 return response()->json(['heading' => 'Success', 'msg' => 'Patient discharged successfully. Bed is now available.']);
             }
         }
-
         return view('/admin/ipd/patient-discharge', compact('ipdRecord', 'ipdLookupError', 'departments'));
     }
 }

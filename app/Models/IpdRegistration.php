@@ -30,6 +30,7 @@ class IpdRegistration extends Model
         'amount',
         'discharge_date',
         'discharge_dept_id',
+        'discharge_type',
     ];
 
     protected $casts = [
