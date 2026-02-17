@@ -112,6 +112,18 @@
 
             }
 
+            table thead th,
+            .thead-dark th {
+                background-color: #435ebe !important;
+                color: #fff !important;
+                border-color: #435ebe !important;
+            }
+
+            .table-bordered th,
+            .table-bordered td {
+                border: 1.5px solid #000 !important;
+            }
+
             </style>
 
         </body>

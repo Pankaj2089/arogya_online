@@ -92,7 +92,8 @@
          $updateIPDRegistration =
          $rePrintIPD =
          $patientDischarge =
-         false;
+         $dietPlan =
+         false;   
          if($action =='admin.new-ipd-registration'){
          	$managerIPDActive = $newIPDRegistration = true;
          }
@@ -104,6 +105,9 @@
          }
          if($action =='admin.patient-discharge'){
          	$managerIPDActive = $patientDischarge = true;
+         }
+         if($action =='admin.diet-plan'){
+         	$managerIPDActive = $dietPlan = true;
          }
          @endphp
          <li class="sidebar-item  has-sub {{$managerIPDActive?'active':''}}"> 
@@ -120,6 +124,9 @@
              </li>
              <li class="submenu-item {{$patientDischarge?'active':''}}"> 
              	<a href="{{ url('/admin/patient-discharge'); }}">Patient Discharge</a> 
+             </li>
+             <li class="submenu-item {{$dietPlan?'active':''}}"> 
+             	<a href="{{ url('/admin/diet-plan'); }}">Diet Plan</a> 
              </li>
            </ul>
         </li>
@@ -192,6 +199,59 @@
              </li>
            </ul>
          </li>
+         @php
+         $reportsActive =
+         $opdReports =
+         $searchPatient =
+         $ipdReports =
+         $dischargeReports =
+         $bedDistributionReports =
+         $dietPlanReports =
+         false;
+         if($action =='admin.opd-reports'){
+         	$reportsActive = $opdReports = true;
+         }
+         if($action =='admin.search-patient'){
+         	$reportsActive = $searchPatient = true;
+         }
+         if($action =='admin.ipd-reports'){
+         	$reportsActive = $ipdReports = true;
+         }
+         if($action =='admin.discharge-reports'){
+         	$reportsActive = $dischargeReports = true;
+         }
+         if($action =='admin.bed-distribution-reports'){
+         	$reportsActive = $bedDistributionReports = true;
+         }
+         if($action =='admin.diet-plan-reports'){
+         	$reportsActive = $dietPlanReports = true;
+         }
+         @endphp
+         <li class="sidebar-item  has-sub {{$reportsActive?'active':''}}"> 
+         	<a href="#" class='sidebar-link'> <i class="bi bi-file-earmark-bar-graph"></i> <span>Reports</span> </a>
+          <ul class="submenu {{$reportsActive?'active':''}}">
+             <li class="submenu-item {{$opdReports?'active':''}}"> 
+             	<a href="{{ url('/admin/opd-reports'); }}">OPD Report</a> 
+             </li>
+             <li class="submenu-item {{$searchPatient?'active':''}}"> 
+             	<a href="{{ url('/admin/search-patient'); }}">Search Patient</a> 
+             </li>
+             <li class="submenu-item {{$ipdReports?'active':''}}"> 
+             	<a href="{{ url('/admin/ipd-reports'); }}">IPD Report</a> 
+             </li>
+             <li class="submenu-item {{$dischargeReports?'active':''}}"> 
+             	<a href="{{ url('/admin/discharge-reports'); }}">Discharge Report</a> 
+             </li>
+             <li class="submenu-item {{$bedDistributionReports?'active':''}}"> 
+             	<a href="{{ url('/admin/bed-distribution-reports'); }}">Bed Distribution Report</a> 
+             </li>
+
+             <li class="submenu-item {{$dietPlanReports?'active':''}}"> 
+             	<a href="{{ url('/admin/diet-plan-reports'); }}">Diet Plan Report</a> 
+             </li>
+
+           </ul>
+        </li>
          <li class="sidebar-item"> <a href="{{ url('/admin/logout'); }}" class='sidebar-link'> <i class="bi bi-box-arrow-right"></i> <span>Log Out</span> </a> </li>
        </ul>
     </div>

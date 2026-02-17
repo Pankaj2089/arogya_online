@@ -57,4 +57,9 @@ class IpdRegistration extends Model
     {
         return $this->belongsTo(Department::class, 'discharge_dept_id');
     }
+    public function opd()
+{
+    return $this->belongsTo(OpdRegistration::class, 'opd_registration_id'); 
+    // change 'opd_id' if your column name is different
+}
 }

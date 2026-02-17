@@ -287,4 +287,5 @@ class OpdController extends Controller
 
         return view('/admin/opd/patient-diseases', compact('departments', 'opdRecords', 'diseases', 'filterDate', 'filterDeptId', 'filterError'));
     }
+
 }

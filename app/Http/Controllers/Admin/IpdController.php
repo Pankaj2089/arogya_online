@@ -11,6 +11,7 @@ use App\Models\Department;
 use App\Models\Disease;
 use App\Models\FinancialYear;
 use Illuminate\Http\Request;
+use App\Models\DietPlans;
 use Validator;
 
 class IpdController extends Controller
@@ -378,5 +379,117 @@ class IpdController extends Controller
             }
         }
         return view('/admin/ipd/patient-discharge', compact('ipdRecord', 'ipdLookupError', 'departments'));
+    }
+
+    public function dietPlan(Request $request)
+    {
+        if (!$request->session()->has('admin_email')) {
+            return redirect('/admin/');
+        }
+
+        $adminDeptId = admin_dept_id();
+        $departmentsQuery = Department::where('status', 1);
+        if ($adminDeptId) {
+            $departmentsQuery->where('id', $adminDeptId);
+        }
+        $departments = $departmentsQuery->orderBy('name')->get(['id', 'name']);
+        $ipdRecords = collect();
+        $diseases = collect();
+        $filterDate = null;
+        $filterDeptId = null;
+        $filterError = null;
+        $filterDateDb = '';
+
+        if ($request->isMethod('post') && $request->input()) {
+            if ($request->has('ipd_diet_plan_submit')) {
+
+                $filterDate   = $request->input('filter_date');
+                $planDate     = date('Y-m-d', strtotime($filterDate));
+                $filterDeptId = $request->input('filter_dept_id');
+            
+                $morningArr   = $request->input('morning', []);
+                $afternoonArr = $request->input('afternoon', []);
+                $eveningArr   = $request->input('evening', []);
+            
+                $allIpdIds = array_unique(array_merge(
+                    array_keys($morningArr),
+                    array_keys($afternoonArr),
+                    array_keys($eveningArr)
+                ));
+            
+                if (empty($allIpdIds)) {
+                    return response()->json([
+                        'heading' => 'Error',
+                        'msg' => 'No data selected.'
+                    ]);
+                }
+            
+                foreach ($allIpdIds as $ipdId) {
+            
+                    $ipd = IpdRegistration::find($ipdId);
+                    if (!$ipd) continue;
+            
+                    $deptId = $filterDeptId ?: $ipd->dept_id;
+            
+                    DietPlans::updateOrCreate(
+                        [
+                            'ipd_no'    => $ipd->ipd_number,
+                            'plan_date' => $planDate
+                        ],
+                        [
+                            'opd_no'       => $ipd->opd_number,
+                            'patient_name' => $ipd->patient_name,
+                            'gendar'       => $ipd->gender,
+                            'morning'      => $morningArr[$ipdId]   ?? 'No',
+                            'afternoon'    => $afternoonArr[$ipdId] ?? 'No',
+                            'evening'      => $eveningArr[$ipdId]   ?? 'No',
+                            'dept_id'      => $deptId,
+                        ]
+                    );
+                }
+            
+                return response()->json([
+                    'heading' => 'Success',
+                    'msg' => 'Diet Plan saved successfully.'
+                ]);
+            }
+
+            // Search: filter by date and department
+           
+            $dateStr = trim($request->input('filter_date', ''));
+            $filterDateDb = date('Y-m-d', strtotime($dateStr));
+            $deptId = $request->input('filter_dept_id') ? (int) $request->input('filter_dept_id') : null;
+            if ($adminDeptId) {
+                $deptId = $adminDeptId;
+            }
+
+            $dateObj = $dateStr ? \DateTime::createFromFormat('m/d/Y', $dateStr) : null;
+            $dateDb = $dateObj ? $dateObj->format('Y-m-d') : null;
+            $today = date('Y-m-d');
+
+            if (!$dateDb) {
+                $filterError = 'Please select date.';
+            } elseif ($dateDb > $today) {
+                $filterError = 'Date cannot be greater than today.';
+            } else {
+
+                $query = IpdRegistration::
+               
+                where(function ($q) use ($dateDb) {
+                    $q->whereNull('discharge_date')
+                      ->orWhere('discharge_date', '>=', $dateDb);
+                });
+            
+                if ($deptId) {
+                    $query->where('dept_id', $deptId);
+                }
+                
+                $ipdRecords = $query->orderBy('opd_number')->get();
+                $filterDate = $dateStr;
+                $filterDeptId = $deptId;
+            }
+        }
+
+        return view('/admin/opd/diet-plans', compact('filterDateDb','departments', 'ipdRecords', 'filterDate', 'filterDeptId', 'filterError'));
     }
 }

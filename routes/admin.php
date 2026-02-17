@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\DiseasesController;
 use App\Http\Controllers\Admin\BedDistributionsController;
 use App\Http\Controllers\Admin\OpdController;
 use App\Http\Controllers\Admin\IpdController;
+use App\Http\Controllers\Admin\ReportsController;
+
 
 
 
@@ -119,12 +121,28 @@ Route::prefix('admin')->group(function(){
     Route::any('/new-opd-registration',[OpdController::class, 'newOpdRegistration'])->name('admin.new-opd-registration');
     Route::any('/re-schedule-opd',[OpdController::class, 'reScheduleOpd'])->name('admin.re-schedule-opd');
     Route::any('/patient-diseases',[OpdController::class, 'patientDiseases'])->name('admin.patient-diseases');
+    
+    Route::any('/diet-plan',[IpdController::class, 'dietPlan'])->name('admin.diet-plan');
 
 	#IPD
     Route::any('/new-ipd-registration',[IpdController::class, 'newIpdRegistration'])->name('admin.new-ipd-registration');
     Route::any('/update-ipd-registration',[IpdController::class, 'updateIpdRegistration'])->name('admin.update-ipd-registration');
     Route::any('/re-print-ipd',[IpdController::class, 'rePrintIpd'])->name('admin.re-print-ipd');
     Route::any('/patient-discharge',[IpdController::class, 'patientDischarge'])->name('admin.patient-discharge');
+
+	#Reports
+    Route::any('/opd-reports',[ReportsController::class, 'opdReports'])->name('admin.opd-reports');
+    Route::get('/opd-reports-export',[ReportsController::class, 'opdReportsExport'])->name('admin.opd-reports-export');
+    Route::any('/search-patient',[ReportsController::class, 'searchPatient'])->name('admin.search-patient');
+    Route::get('/search-patient-export',[ReportsController::class, 'searchPatientExport'])->name('admin.search-patient-export');
+    Route::any('/ipd-reports',[ReportsController::class, 'ipdReports'])->name('admin.ipd-reports');
+    Route::get('/ipd-reports-export',[ReportsController::class, 'ipdReportsExport'])->name('admin.ipd-reports-export');
+    Route::any('/discharge-reports',[ReportsController::class, 'dischargeReports'])->name('admin.discharge-reports');
+    Route::get('/discharge-reports-export',[ReportsController::class, 'dischargeReportsExport'])->name('admin.discharge-reports-export');
+    Route::any('/bed-distribution-reports',[ReportsController::class, 'bedDistributionReports'])->name('admin.bed-distribution-reports');
+    Route::get('/bed-distribution-reports-export',[ReportsController::class, 'bedDistributionReportsExport'])->name('admin.bed-distribution-reports-export');
+    Route::any('/diet-plan-reports',[ReportsController::class, 'dietPlanReports'])->name('admin.diet-plan-reports');
+    Route::get('/diet-plan-reports-export',[ReportsController::class, 'dietPlanReportsExport'])->name('admin.diet-plan-reports-export');
 
 });
 
