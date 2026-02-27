@@ -64,10 +64,15 @@
             <table class="table table-bordered mb-0">
               <thead class="thead-dark">
                 <tr>
-                  <th style="width: 60%;">IPD Details</th>
-                  <th style="width: 10%;">Morning</th>
-                  <th style="width: 10%;">Afternoon</th>
-                  <th style="width: 10%;">Evening</th>
+                  <th style="width: 8%;">OPD Number</th>
+                  <th style="width: 8%;">IPD Number</th>
+                  <th style="width: 8%;">Patient</th>
+                  <th style="width: 8%;">Age</th>
+                  <th style="width: 8%;">Gender</th>
+                  <th style="width: 8%;">IPD Date</th>
+                  <th style="width: 8%;">Morning</th>
+                  <th style="width: 8%;">Afternoon</th>
+                  <th style="width: 8%;">Evening</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,13 +80,32 @@
                 <tr>
                   <td>
                     <div class="small">
-                      <strong>OPD No:</strong> {{ $ipd->opd_number }} &nbsp;|&nbsp; <strong> IPD No:</strong> {{ $ipd->ipd_number ?? '—' }}<br>
-                      <strong>Patient:</strong> {{ $ipd->patient_name ?? '—' }}
-                      @if($ipd->patient_age !== null || $ipd->gender)
-                        ({{ $ipd->patient_age ?? '—' }}{{ $ipd->patient_age_unit ?? '' }} / {{ $ipd->gender ?? '—' }})
-                      @endif
-                      <br>
-                      <strong>IPD Date:</strong> {{ $ipd->date ? $ipd->date->format('d/m/Y') : '—' }}
+                      {{ $ipd->ipd_number }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="small">
+                      {{ $ipd->opd_number }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="small">
+                      {{ $ipd->patient_name ?? '—' }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="small">
+                      {{ $ipd->patient_age ?? '—' }} {{ $ipd->patient_age_unit ?? '' }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="small">
+                      {{ $ipd->gender ?? '—' }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="small">
+                     {{ $ipd->date ? $ipd->date->format('d/m/Y') : '—' }}
                     </div>
                   </td>
                   @php

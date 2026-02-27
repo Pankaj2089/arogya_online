@@ -355,11 +355,11 @@ class ReportsController extends Controller
                         
                         
                         $oldMale = $deptRecords->filter(function ($r) {
-                            return $r->opd && $r->opd->register_type == 'OLD' && $r->gender == 'Male';
+                            return $r->opd && $r->opd->register_type == 'Old' && $r->gender == 'Male';
                         })->count();
                         
                         $oldFemale = $deptRecords->filter(function ($r) {
-                            return $r->opd && $r->opd->register_type == 'OLD' && $r->gender == 'Female';
+                            return $r->opd && $r->opd->register_type == 'Old' && $r->gender == 'Female';
                         })->count();
                         
                         $newMale = $deptRecords->filter(function ($r) {
@@ -463,11 +463,11 @@ class ReportsController extends Controller
                 $totalCount = $deptRecords->count();
     
                 $oldMale = $deptRecords->filter(function ($r) {
-                    return $r->opd && strtoupper($r->opd->register_type) == 'OLD' && $r->gender == 'Male';
+                    return $r->opd && strtoupper($r->opd->register_type) == 'Old' && $r->gender == 'Male';
                 })->count();
     
                 $oldFemale = $deptRecords->filter(function ($r) {
-                    return $r->opd && strtoupper($r->opd->register_type) == 'OLD' && $r->gender == 'Female';
+                    return $r->opd && strtoupper($r->opd->register_type) == 'Old' && $r->gender == 'Female';
                 })->count();
     
                 $newMale = $deptRecords->filter(function ($r) {
@@ -853,7 +853,7 @@ public function dietPlanReports(Request $request)
                 ->with('error', 'No data to export for selected date.');
         }
     
-        $filename = 'diet-chart-reports-' . date('Y-m-d-His') . '.csv';
+        $filename = 'diet-plan-reports-' . date('Y-m-d-His') . '.csv';
     
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -864,6 +864,7 @@ public function dietPlanReports(Request $request)
         // Header Row
         fputcsv($output, [
             'S.No.',
+            'Diet Date',
             'IPD No.',
             'OPD No.',
             'Patient Name',
@@ -871,14 +872,14 @@ public function dietPlanReports(Request $request)
             'Department',
             'Morning',
             'Afternoon',
-            'Evening',
-            'Plan Date'
+            'Evening'
         ]);
     
         foreach ($records as $index => $row) {
     
             fputcsv($output, [
                 $index + 1,
+                $row->plan_date ? date('d-m-Y', strtotime($row->plan_date)) : '—',
                 $row->ipd_no ?? '—',
                 $row->opd_no ?? '—',
                 $row->patient_name ?? '—',
@@ -887,7 +888,6 @@ public function dietPlanReports(Request $request)
                 $row->morning ?? 'No',
                 $row->afternoon ?? 'No',
                 $row->evening ?? 'No',
-                $row->plan_date ? date('d-m-Y', strtotime($row->plan_date)) : '—',
             ]);
         }
     

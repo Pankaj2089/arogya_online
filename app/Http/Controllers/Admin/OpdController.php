@@ -198,7 +198,7 @@ class OpdController extends Controller
                         'patient_age_unit' => in_array($request->input('patient_age_unit'), ['Years', 'Months', 'Days']) ? $request->input('patient_age_unit') : 'Years',
                         'gender' => $request->input('gender') ?: null,
                         'dept_id' => $deptIdForOpd,
-                        'register_type' => 'OLD',
+                        'register_type' => 'Old',
                         'opd_number' => $opdNumber,
                         'hid_number' => trim($request->input('hid_number_to_use')),
                     ]);

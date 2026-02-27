@@ -68,6 +68,7 @@
               <thead class="thead-dark">
                 <tr>
                   <th>S.No.</th>
+                  <th>Diet Date</th>
                   <th>IPD No.</th>
                   <th>OPD No.</th>
                   <th>Patient Name</th>
@@ -76,7 +77,6 @@
                   <th>Morning</th>
                   <th>Afternoon</th>
                   <th>Evening</th>
-                  <th>Plan Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,6 +92,7 @@
 
                   <tr>
                     <td>{{ $sr }}</td>
+                    <td>{{ date('d-m-Y', strtotime($row->plan_date)) ?? '—' }}</td>
                     <td>{{ $row->ipd_no ?? '—' }}</td>
                     <td>{{ $row->opd_no ?? '—' }}</td>
                     <td>{{ $row->patient_name ?? '—' }}</td>
@@ -100,7 +101,6 @@
                     <td>{{ $row->morning ?? 'No' }}</td>
                     <td>{{ $row->afternoon ?? 'No' }}</td>
                     <td>{{ $row->evening ?? 'No' }}</td>
-                    <td>{{ date('d-m-Y', strtotime($row->plan_date)) ?? '—' }}</td>
                   </tr>
 
                   @endforeach
