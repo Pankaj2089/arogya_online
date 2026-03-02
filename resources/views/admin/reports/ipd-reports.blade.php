@@ -108,7 +108,7 @@
                           <th rowspan="2">Department</th>
 
                           <th colspan="3" class="text-center">New Patient</th>
-                          <th colspan="3" class="text-center">Old Patient</th>
+                          <th colspan="3" class="text-center">Discharge Patient</th>
 
                           <th rowspan="2">Grand Total</th>
                       </tr>

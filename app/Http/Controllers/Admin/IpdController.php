@@ -129,15 +129,13 @@ class IpdController extends Controller
             $doctorsQuery->where('dept_id', $deptId);
         }
         $doctors = $doctorsQuery->orderBy('name')->get(['id', 'name']);
-        $bedsQuery = BedDistribution::where('status', 1)->where('bed_status', 'available');
-        if (admin_dept_id()) {
-            $bedsQuery->where('department_id', admin_dept_id());
-        }
-        $beds = $bedsQuery->orderBy('bed_no')->get();
+        
+       
         $lastIpdQuery = IpdRegistration::with('opdRegistration')->orderBy('id', 'desc');
         if (admin_dept_id()) {
             $lastIpdQuery->where('dept_id', admin_dept_id());
         }
+       
         if ($deptId) {
             $lastIpdQuery->where('dept_id', $deptId);
         }
@@ -148,6 +146,13 @@ class IpdController extends Controller
         if ($opdRecord && $opdRecord->disease_id > 0) {
             $disease = Disease::find($opdRecord->disease_id);
         }
+
+
+        $bedsQuery = BedDistribution::where('status', 1)->where('bed_status', 'available');
+        if ($deptId) {
+            $bedsQuery->where('department_id', $opdRecord->dept_id);
+        }
+        $beds = $bedsQuery->orderBy('bed_no')->get();
     
         return view('/admin/ipd/new-ipd-registration', compact('opdRecord', 'opdLookupError', 'doctors', 'beds', 'lastIpd', 'disease'  ));
     }

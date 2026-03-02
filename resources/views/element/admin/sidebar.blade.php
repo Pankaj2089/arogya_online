@@ -252,6 +252,35 @@
 
            </ul>
         </li>
+        
+        @php
+         $managerStatisticsActive =
+         $opdStatistics =
+         $ipdStatistics =
+         false;         
+         if($action =='admin.opd-statistics'){
+         	$managerStatisticsActive = $opdStatistics = true;
+         }
+         if($action =='admin.ipd-statistics'){
+         	$managerStatisticsActive = $ipdStatistics = true;
+         }        
+         @endphp
+         <li class="sidebar-item  has-sub {{$managerStatisticsActive?'active':''}}"> 
+         	<a href="#" class='sidebar-link'> <i class="bi bi-bar-chart"></i> <span>Statistics</span> </a>
+          <ul class="submenu {{$managerStatisticsActive?'active':''}}">
+             <li class="submenu-item {{$opdStatistics?'active':''}}"> 
+             	<a href="{{ url('/admin/opd-statistics'); }}">OPD Statistics</a> 
+             </li>
+             <li class="submenu-item {{$ipdStatistics?'active':''}} "> 
+             	<a href="{{ url('/admin/ipd-statistics'); }}">IPD Statistics</a> 
+             </li>
+             <?php /*?>@if(Session::get('admin_type') == 'Admin')
+             <li class="submenu-item {{$accounts?'active':''}}"> 
+             	<a href="{{ url('/admin/accounts'); }}">Accounts</a> 
+             </li>
+             @endif<?php */?>
+           </ul>
+        </li> 
          <li class="sidebar-item"> <a href="{{ url('/admin/logout'); }}" class='sidebar-link'> <i class="bi bi-box-arrow-right"></i> <span>Log Out</span> </a> </li>
        </ul>
     </div>

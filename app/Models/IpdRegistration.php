@@ -62,4 +62,8 @@ class IpdRegistration extends Model
     return $this->belongsTo(OpdRegistration::class, 'opd_registration_id'); 
     // change 'opd_id' if your column name is different
 }
+  public function department()
+    {
+        return $this->belongsTo(Department::class, 'dept_id');
+    }
 }

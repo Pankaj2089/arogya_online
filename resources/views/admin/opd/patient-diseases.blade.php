@@ -87,7 +87,9 @@
                     <select class="form-select form-select-sm select2" name="opd_disease[{{ $opd->id }}]">
                       <option value="">--Select--</option>
                       @foreach($diseases as $d)
-                      <option value="{{ $d->id }}" {{ ($opd->disease_id ?? '') == $d->id ? 'selected' : '' }}>{{ $d->name }}</option>
+                        @if($d->dept_id == $opd->dept_id)
+                          <option value="{{ $d->id }}" {{ ($opd->disease_id ?? '') == $d->id ? 'selected' : '' }}>{{ $d->name }}</option>
+                        @endif
                       @endforeach
                     </select>
                   </td>

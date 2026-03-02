@@ -23,6 +23,8 @@ Route::prefix('admin')->group(function () {
 	Route::any('/get-sales',[ReportController::class, 'getSales'])->name('report.get.sales');
 	Route::any('/get-sales-records',[ReportController::class, 'getSalesRecords'])->name('report.get.sales.records');
 
+	
+
 
 });
 

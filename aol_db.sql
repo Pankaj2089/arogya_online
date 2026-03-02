@@ -226,8 +226,8 @@ CREATE TABLE `opd_registration` (
 
 INSERT INTO `opd_registration` (`id`, `financial_year_id`, `patient_name`, `fath_husb_name`, `address`, `date`, `patient_age`, `patient_age_unit`, `gender`, `dept_id`, `register_type`, `opd_number`, `hid_number`, `disease_id`, `created_date`) VALUES
 (1, 2, 'Pankaj', 'Test', '#a123 Main Road', '2026-02-01', 35, 'Years', 'Male', 2, 'New', '2026000001', '2026-P-0001', 2, '2026-02-01 03:34:30'),
-(4, 2, 'Pankaj', 'Test', '#a123 Main Road', '2026-02-01', 35, 'Years', 'Male', 1, 'OLD', '2026000002', '2026-P-0001', NULL, '2026-02-01 03:56:12'),
-(6, 2, 'Pankaj', 'Test', '#a123 Main Road', '2026-02-01', 36, 'Days', 'Male', 2, 'OLD', '2026000003', '2026-P-0001', 1, '2026-02-01 03:59:35');
+(4, 2, 'Pankaj', 'Test', '#a123 Main Road', '2026-02-01', 35, 'Years', 'Male', 1, 'Old', '2026000002', '2026-P-0001', NULL, '2026-02-01 03:56:12'),
+(6, 2, 'Pankaj', 'Test', '#a123 Main Road', '2026-02-01', 36, 'Days', 'Male', 2, 'Old', '2026000003', '2026-P-0001', 1, '2026-02-01 03:59:35');
 
 -- --------------------------------------------------------
 

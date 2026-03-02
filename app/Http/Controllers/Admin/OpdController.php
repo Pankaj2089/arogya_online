@@ -281,7 +281,7 @@ class OpdController extends Controller
                 if ($deptId) {
                     $diseasesQuery->where('dept_id', $deptId);
                 }
-                $diseases = $diseasesQuery->get(['id', 'name']);
+                $diseases = $diseasesQuery->get(['id', 'name', 'dept_id']);
             }
         }
 

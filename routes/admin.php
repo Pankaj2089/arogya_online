@@ -144,6 +144,12 @@ Route::prefix('admin')->group(function(){
     Route::any('/diet-plan-reports',[ReportsController::class, 'dietPlanReports'])->name('admin.diet-plan-reports');
     Route::get('/diet-plan-reports-export',[ReportsController::class, 'dietPlanReportsExport'])->name('admin.diet-plan-reports-export');
 
+    Route::any('/opd-statistics',[ReportsController::class, 'getOPDStatistics'])->name('admin.opd-statistics');
+    Route::get('/opd-statistics-export',[ReportsController::class, 'opdStatisticsExport'])->name('admin.opd-statistics-export');
+	Route::any('/ipd-statistics',[ReportsController::class, 'getIPDStatistics'])->name('admin.ipd-statistics');
+    Route::get('/ipd-statistics-export',[ReportsController::class, 'ipdStatisticsExport'])->name('admin.ipd-statistics-export');
+
+
 });
 
 
